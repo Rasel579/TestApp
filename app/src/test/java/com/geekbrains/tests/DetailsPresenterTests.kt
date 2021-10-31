@@ -12,14 +12,20 @@ import org.mockito.MockitoAnnotations
 
 class DetailsPresenterTests {
     private lateinit var presenter: DetailsPresenter
+    private  lateinit var viewDetailsContractReflection : CharSequence
 
     @Mock
     private lateinit var viewContract: ViewDetailsContract
+
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         presenter = DetailsPresenter(viewContract)
+        viewDetailsContractReflection  = viewContract
+            .javaClass
+            .simpleName
+            .subSequence(0, "ViewDetailsContract".length)
     }
 
     @Test
@@ -40,8 +46,8 @@ class DetailsPresenterTests {
         val instance = presenter.javaClass
         instance.declaredFields.forEach {
             it.isAccessible = true
-            if (it.toString() == "ViewContract") {
-                Assert.assertNull(it)
+            if (it.name == "view"){
+                Assert.assertNull(it.get(presenter))
             }
         }
     }
@@ -52,8 +58,8 @@ class DetailsPresenterTests {
         val instance = presenter.javaClass
         instance.declaredFields.forEach {
             it.isAccessible = true
-            if (it.toString() == "ViewContract") {
-                Assert.assertEquals(viewContract, it)
+            if (it.name == "view") {
+                Assert.assertEquals(viewContract, it.get(presenter))
             }
         }
     }
