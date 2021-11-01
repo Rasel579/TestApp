@@ -1,6 +1,5 @@
 package com.geekbrains.tests
 
-import android.os.Build
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -33,20 +32,20 @@ class MainActivityEspressoTest {
         onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
 
-        if (Build.TYPE == MainActivity.FAKE) {
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
             onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
         } else {
             onView(isRoot()).perform(delay())
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2653")))
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2283")))
         }
     }
 
     private fun delay(): ViewAction? {
         return object : ViewAction {
             override fun getConstraints(): Matcher<View> = isRoot()
-            override fun getDescription(): String = "wait for $7 seconds"
+            override fun getDescription(): String = "wait for $2 seconds"
             override fun perform(uiController: UiController, v: View?) {
-                uiController.loopMainThreadForAtLeast(7000)
+                uiController.loopMainThreadForAtLeast(2000)
             }
         }
     }
