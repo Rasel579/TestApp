@@ -39,6 +39,10 @@ class MainActivityEspressoTest {
         onView(withId(R.id.toDetailsActivityButton)).check(matches(isDisplayed()))
     }
     @Test
+    fun button_Is_HasText(){
+        onView(withId(R.id.toDetailsActivityButton)).check(matches(withText("TO DETAILS")))
+    }
+    @Test
     fun editTextView_Is_Displayed(){
         onView(withId(R.id.searchEditText)).check(matches(isDisplayed()))
     }
