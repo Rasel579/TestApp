@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.geekbrains.tests.view.search.MainActivity
+import junit.framework.TestCase
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
@@ -27,17 +28,35 @@ class MainActivityEspressoTest {
     }
 
     @Test
+    fun activity_is_Not_Null(){
+        scenario.onActivity {
+            TestCase.assertNotNull(it)
+        }
+    }
+
+    @Test
+    fun button_Is_Displayed(){
+        onView(withId(R.id.toDetailsActivityButton)).check(matches(isDisplayed()))
+    }
+    @Test
+    fun editTextView_Is_Displayed(){
+        onView(withId(R.id.searchEditText)).check(matches(isDisplayed()))
+    }
+    @Test
     fun activitySearch_IsWorking() {
         onView(withId(R.id.searchEditText)).perform(click())
         onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
+        onView(isRoot()).perform(delay())
+        onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2655")))
+    }
+    @Test
+    fun progressBar_isDisplayed(){
+        onView(withId(R.id.searchEditText)).perform(click())
+        onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
+        onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
+        onView(withId(R.id.progressBar)).check(matches(isDisplayed()))
 
-        if (BuildConfig.TYPE == MainActivity.FAKE) {
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
-        } else {
-            onView(isRoot()).perform(delay())
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2283")))
-        }
     }
 
     private fun delay(): ViewAction? {
